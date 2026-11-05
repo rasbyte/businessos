@@ -13,3 +13,4 @@ dist
 
 # logs
 *.log
+packages/database/src/generated

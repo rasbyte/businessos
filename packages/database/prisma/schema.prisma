@@ -1,0 +1,32 @@
+generator client {
+  provider            = "prisma-client"
+  output              = "../src/generated/prisma"
+  runtime             = "nodejs"
+  moduleFormat        = "esm"
+  importFileExtension = "js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum OrganizationType {
+  INTERNAL
+  CUSTOMER
+}
+
+enum OrganizationStatus {
+  ACTIVE
+  SUSPENDED
+}
+
+model Organization {
+  id        String             @id @default(uuid(7)) @db.Uuid
+  name      String
+  type      OrganizationType   @default(CUSTOMER)
+  status    OrganizationStatus @default(ACTIVE)
+  createdAt DateTime           @default(now()) @map("created_at")
+  updatedAt DateTime           @updatedAt @map("updated_at")
+
+  @@map("organizations")
+}
