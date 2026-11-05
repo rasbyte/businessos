@@ -1,0 +1,31 @@
+# Contributing
+
+## Setup
+
+1. Install Node.js 26 (see `.node-version`) and pnpm 12.
+2. Run `pnpm install`.
+
+## Commands
+
+| Command          | What it does                  |
+| ---------------- | ----------------------------- |
+| `pnpm dev`       | Start all apps in development |
+| `pnpm build`     | Build everything              |
+| `pnpm lint`      | Lint with oxlint              |
+| `pnpm format`    | Format with Prettier          |
+| `pnpm typecheck` | Type-check all packages       |
+| `pnpm test`      | Run all tests                 |
+
+## Commit messages
+
+We use Conventional Commits: `type(scope): short description`.
+
+- Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`.
+- Scopes: `api`, `web`, `database`, `contracts`, `config`, `docs`, `infra`, `ci`, `deps`.
+- Write the description in lowercase, present tense, no full stop.
+
+A Git hook checks the format and formats staged files on every commit.
+
+## Decisions
+
+Technology and design decisions are recorded in `docs/decisions`.
