@@ -1,3 +1,6 @@
 packages:
   - "apps/*"
   - "packages/*"
+
+# Pin exact versions on `pnpm add` (pnpm 11+ reads this here, not from .npmrc)
+saveExact: true

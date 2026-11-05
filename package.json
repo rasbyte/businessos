@@ -1,14 +1,15 @@
 {
   "name": "businessos",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Multi-business management platform, starting with a rent system",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "license": "UNLICENSED",
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
@@ -18,5 +19,9 @@
   },
   "packageManager": "pnpm@12.16.1",
   "type": "module",
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "turbo": "2.11.10",
+    "typescript": "6.0.3"
+  }
 }
