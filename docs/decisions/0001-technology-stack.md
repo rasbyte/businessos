@@ -9,15 +9,15 @@ BusinessOS starts as a rent system for shops and flats and must grow into a mult
 
 ## Decision
 
-| Part | Choice |
-| --- | --- |
-| Runtime | Node.js 26 LTS |
+| Part            | Choice                                       |
+| --------------- | -------------------------------------------- |
+| Runtime         | Node.js 26 LTS                               |
 | Package manager | pnpm 12 with workspaces, Turborepo for tasks |
-| API | NestJS 12 |
-| Web | Next.js 16 (App Router), Tailwind CSS 4 |
-| Database | PostgreSQL 18 with Prisma 7 |
-| Queue and cache | Redis with BullMQ |
-| Language | TypeScript 6 |
+| API             | NestJS 12                                    |
+| Web             | Next.js 16 (App Router), Tailwind CSS 4      |
+| Database        | PostgreSQL 18 with Prisma 7                  |
+| Queue and cache | Redis with BullMQ                            |
+| Language        | TypeScript 6                                 |
 
 ## Why not the newest
 
