@@ -20,6 +20,21 @@ enum OrganizationStatus {
   SUSPENDED
 }
 
+enum PlatformRole {
+  DEVELOPER
+  PLATFORM_ADMIN
+}
+
+enum MembershipRole {
+  OWNER
+  MANAGER
+}
+
+enum Language {
+  BN
+  EN
+}
+
 model Organization {
   id        String             @id @default(uuid(7)) @db.Uuid
   name      String
@@ -28,5 +43,80 @@ model Organization {
   createdAt DateTime           @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt DateTime           @updatedAt @map("updated_at") @db.Timestamptz(3)
 
+  memberships Membership[]
+  invites     Invite[]
+
   @@map("organizations")
+}
+
+model User {
+  id           String        @id @default(uuid(7)) @db.Uuid
+  phone        String        @unique
+  name         String?
+  language     Language      @default(BN)
+  platformRole PlatformRole? @map("platform_role")
+  isActive     Boolean       @default(true) @map("is_active")
+  lastLoginAt  DateTime?     @map("last_login_at") @db.Timestamptz(3)
+  createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt    DateTime      @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  memberships Membership[]
+  sessions    Session[]
+  invitesSent Invite[]
+
+  @@map("users")
+}
+
+model Membership {
+  id             String         @id @default(uuid(7)) @db.Uuid
+  userId         String         @map("user_id") @db.Uuid
+  organizationId String         @map("organization_id") @db.Uuid
+  role           MembershipRole
+  permissions    String[]       @default([])
+  isActive       Boolean        @default(true) @map("is_active")
+  createdAt      DateTime       @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime       @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, organizationId])
+  @@index([organizationId])
+  @@map("memberships")
+}
+
+model Invite {
+  id             String         @id @default(uuid(7)) @db.Uuid
+  organizationId String         @map("organization_id") @db.Uuid
+  invitedById    String         @map("invited_by_id") @db.Uuid
+  phone          String
+  role           MembershipRole
+  permissions    String[]       @default([])
+  expiresAt      DateTime       @map("expires_at") @db.Timestamptz(3)
+  acceptedAt     DateTime?      @map("accepted_at") @db.Timestamptz(3)
+  revokedAt      DateTime?      @map("revoked_at") @db.Timestamptz(3)
+  createdAt      DateTime       @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  invitedBy    User         @relation(fields: [invitedById], references: [id])
+
+  @@index([organizationId])
+  @@index([phone])
+  @@map("invites")
+}
+
+model Session {
+  id        String    @id @default(uuid(7)) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  tokenHash String    @unique @map("token_hash")
+  userAgent String?   @map("user_agent")
+  ip        String?
+  expiresAt DateTime  @map("expires_at") @db.Timestamptz(3)
+  revokedAt DateTime? @map("revoked_at") @db.Timestamptz(3)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
 }
