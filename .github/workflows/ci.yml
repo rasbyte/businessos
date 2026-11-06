@@ -14,8 +14,34 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      # Placeholder so `prisma generate` can load its config. It never connects.
-      DATABASE_URL: postgresql://ci:ci@localhost:5432/ci
+      # Test-only values. They are not secrets and are never used outside CI.
+      DATABASE_URL: postgresql://businessos:businessos@localhost:5432/businessos
+      REDIS_URL: redis://localhost:6379
+      OTP_SECRET: ci-only-otp-secret-at-least-32-characters-long
+      JWT_SECRET: ci-only-jwt-secret-at-least-32-characters-long
+    services:
+      postgres:
+        image: postgres:18-alpine
+        env:
+          POSTGRES_USER: businessos
+          POSTGRES_PASSWORD: businessos
+          POSTGRES_DB: businessos
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U businessos -d businessos"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+      redis:
+        image: redis:8-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
     steps:
       - uses: actions/checkout@v6
       - uses: pnpm/action-setup@v6
@@ -29,3 +55,7 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm build
       - run: pnpm test
+      - name: Apply database migrations
+        run: pnpm --filter @businessos/database migrate:deploy
+      - name: End-to-end tests
+        run: pnpm --filter @businessos/api test:e2e

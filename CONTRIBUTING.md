@@ -29,3 +29,7 @@ A Git hook checks the format and formats staged files on every commit.
 ## Decisions
 
 Technology and design decisions are recorded in `docs/decisions`.
+
+## End-to-end tests
+
+`pnpm --filter @businessos/api test:e2e` runs the API against a real PostgreSQL and Redis, so start them first with `pnpm infra:up` and apply migrations with `pnpm --filter @businessos/database migrate:dev`. CI starts its own services.
