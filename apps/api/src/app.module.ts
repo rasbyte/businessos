@@ -1,6 +1,8 @@
 import { fileURLToPath } from 'node:url';
-import { Module } from '@nestjs/common';
+import { Module, StandardSchemaValidationPipe } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { APP_PIPE } from '@nestjs/core';
+import { AuthModule } from './auth/auth.module.js';
 import { envSchema } from './config/env.js';
 import { DatabaseModule } from './database/database.module.js';
 import { HealthModule } from './health/health.module.js';
@@ -17,6 +19,8 @@ const envFilePath = fileURLToPath(new URL('../../../.env', import.meta.url));
     DatabaseModule,
     RedisModule,
     HealthModule,
+    AuthModule,
   ],
+  providers: [{ provide: APP_PIPE, useClass: StandardSchemaValidationPipe }],
 })
 export class AppModule {}
