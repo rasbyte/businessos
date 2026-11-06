@@ -23,13 +23,13 @@
     "seed": "tsc -p tsconfig.json && node --env-file=../../.env dist/seed.js"
   },
   "dependencies": {
-    "@prisma/adapter-pg": "^7.10.1",
-    "@prisma/client": "^7.10.1"
+    "@prisma/adapter-pg": "7.10.1",
+    "@prisma/client": "7.10.1"
   },
   "devDependencies": {
     "@businessos/config": "workspace:*",
-    "@types/node": "^26.6.6",
+    "@types/node": "26.6.6",
     "dotenv": "18.0.9",
-    "prisma": "^7.10.1"
+    "prisma": "7.10.1"
   }
 }
