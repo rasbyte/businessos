@@ -25,8 +25,8 @@ model Organization {
   name      String
   type      OrganizationType   @default(CUSTOMER)
   status    OrganizationStatus @default(ACTIVE)
-  createdAt DateTime           @default(now()) @map("created_at")
-  updatedAt DateTime           @updatedAt @map("updated_at")
+  createdAt DateTime           @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime           @updatedAt @map("updated_at") @db.Timestamptz(3)
 
   @@map("organizations")
 }
