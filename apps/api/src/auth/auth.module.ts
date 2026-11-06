@@ -2,16 +2,20 @@ import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { Env } from '../config/env.js';
 import { AuthController } from './auth.controller.js';
+import { AuthGuard } from './auth.guard.js';
 import { AuthService } from './auth.service.js';
 import { OtpService } from './otp.service.js';
 import { ConsoleSmsSender } from './sms/console-sms-sender.js';
 import { SmsSender } from './sms/sms-sender.js';
+import { TokenService } from './token.service.js';
 
 @Module({
   controllers: [AuthController],
   providers: [
     AuthService,
+    AuthGuard,
     OtpService,
+    TokenService,
     {
       provide: SmsSender,
       inject: [ConfigService],
@@ -23,5 +27,6 @@ import { SmsSender } from './sms/sms-sender.js';
       },
     },
   ],
+  exports: [AuthGuard, TokenService],
 })
 export class AuthModule {}

@@ -8,7 +8,7 @@ function setup(user: { isActive: boolean } | null) {
   };
   const database = { client: { user: { findUnique: vi.fn().mockResolvedValue(user) } } };
   const sms = { send: vi.fn().mockResolvedValue(undefined) };
-  const service = new AuthService(database as never, otp as never, sms as never);
+  const service = new AuthService(database as never, otp as never, sms as never, {} as never);
   return { service, otp, sms };
 }
 

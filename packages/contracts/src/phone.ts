@@ -4,7 +4,7 @@ const E164 = /^\+[1-9][0-9]{7,14}$/;
 const BD_LOCAL = /^01[3-9][0-9]{8}$/;
 const BANGLA_DIGITS = '০১২৩৪৫৬৭৮৯';
 
-function toAsciiDigits(value: string): string {
+export function toAsciiDigits(value: string): string {
   return value.replace(/[০-৯]/g, (digit) => String(BANGLA_DIGITS.indexOf(digit)));
 }
 
