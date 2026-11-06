@@ -19,7 +19,8 @@
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "migrate:dev": "prisma migrate dev",
     "migrate:deploy": "prisma migrate deploy",
-    "studio": "prisma studio"
+    "studio": "prisma studio",
+    "seed": "tsc -p tsconfig.json && node --env-file=../../.env dist/seed.js"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.1",
