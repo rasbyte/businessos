@@ -37,3 +37,7 @@ Technology and design decisions are recorded in `docs/decisions`.
 ## Ports
 
 The API listens on port 3000 and the web app on port 3001 in development.
+
+## Web app settings
+
+The web app reads `API_URL` (default `http://localhost:3000`). To override it locally, put it in `apps/web/.env.local`, which is not committed.

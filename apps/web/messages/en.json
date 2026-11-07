@@ -2,9 +2,28 @@
   "Home": {
     "brand": "BusinessOS",
     "title": "Rent management",
-    "subtitle": "Collect rent, track electricity bills and keep every agreement safe."
+    "subtitle": "Collect rent, track electricity bills and keep every agreement safe.",
+    "signedInAs": "Signed in as {name}",
+    "signOut": "Sign out"
   },
   "Language": {
     "label": "Language"
+  },
+  "Login": {
+    "title": "Sign in",
+    "subtitle": "Enter your mobile number. We will send you a code by SMS.",
+    "phoneLabel": "Mobile number",
+    "phoneHint": "For example 01712345678",
+    "sendCode": "Send code",
+    "codeLabel": "6 digit code",
+    "codeSent": "If this number is registered, we sent a 6 digit code to {phone}.",
+    "verify": "Sign in",
+    "changeNumber": "Use a different number",
+    "errors": {
+      "invalidPhone": "Please enter a valid mobile number.",
+      "invalidCode": "The code is wrong or has expired.",
+      "tooMany": "Too many attempts. Please try again in a little while.",
+      "unavailable": "We cannot connect right now. Please try again in a little while."
+    }
   }
 }
