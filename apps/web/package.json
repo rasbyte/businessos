@@ -1,0 +1,27 @@
+{
+  "name": "@businessos/web",
+  "version": "0.0.0",
+  "private": true,
+  "description": "BusinessOS web app (Next.js)",
+  "license": "UNLICENSED",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "next typegen && tsc --noEmit"
+  },
+  "dependencies": {
+    "next": "16.4.5",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@businessos/config": "workspace:*",
+    "@tailwindcss/turbopack": "4.3.4",
+    "@types/node": "26.6.6",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "tailwindcss": "4.3.4",
+    "typescript": "6.0.3"
+  }
+}

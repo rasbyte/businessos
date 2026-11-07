@@ -5,3 +5,4 @@ dist
 coverage
 pnpm-lock.yaml
 packages/database/src/generated
+apps/web/next-env.d.ts

@@ -5,7 +5,9 @@ packages:
 # Pin exact versions on `pnpm add` (pnpm 11+ reads this here, not from .npmrc)
 saveExact: true
 
-# Dependencies allowed to run install scripts (Prisma downloads its engines)
+# Dependencies and whether they may run install scripts
 allowBuilds:
   '@prisma/engines': true
   prisma: true
+  sharp: false
+  unrs-resolver: false

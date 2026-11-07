@@ -8,6 +8,7 @@
     "**/.next/**",
     "**/.turbo/**",
     "**/node_modules/**",
-    "**/src/generated/**"
+    "**/src/generated/**",
+    "**/next-env.d.ts"
   ]
 }
