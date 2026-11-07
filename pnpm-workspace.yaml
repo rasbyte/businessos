@@ -7,7 +7,9 @@ saveExact: true
 
 # Dependencies and whether they may run install scripts
 allowBuilds:
+  '@parcel/watcher': true
   '@prisma/engines': true
+  '@swc/core': true
   prisma: true
   sharp: false
   unrs-resolver: false

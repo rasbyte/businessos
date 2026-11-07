@@ -33,3 +33,7 @@ Technology and design decisions are recorded in `docs/decisions`.
 ## End-to-end tests
 
 `pnpm --filter @businessos/api test:e2e` runs the API against a real PostgreSQL and Redis, so start them first with `pnpm infra:up` and apply migrations with `pnpm --filter @businessos/database migrate:dev`. CI starts its own services.
+
+## Ports
+
+The API listens on port 3000 and the web app on port 3001 in development.
