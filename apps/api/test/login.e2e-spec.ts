@@ -4,6 +4,7 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { AppModule } from '../src/app.module.js';
 import { configureApp } from '../src/app.setup.js';
 import { SmsSender } from '../src/auth/sms/sms-sender.js';
+import { TokenService } from '../src/auth/token.service.js';
 import { DatabaseService } from '../src/database/database.service.js';
 import { RedisService } from '../src/redis/redis.service.js';
 
@@ -100,15 +101,24 @@ describe('Login flow (e2e)', () => {
     expect((await me('not-a-token')).status).toBe(401);
   });
 
-  it('rotates refresh tokens and ends every session when an old one is reused', async () => {
+  it('rotates refresh tokens and refuses an immediate replay without ending the session', async () => {
     const first = await login();
     const refreshed = await post('refresh', { refreshToken: first.refreshToken });
     expect(refreshed.status).toBe(200);
     const second = (await refreshed.json()) as Tokens;
+    expect((await post('refresh', { refreshToken: first.refreshToken })).status).toBe(401);
     expect((await me(second.accessToken)).status).toBe(200);
+  });
 
-    const reused = await post('refresh', { refreshToken: first.refreshToken });
-    expect(reused.status).toBe(401);
+  it('ends every session when an old refresh token is replayed later', async () => {
+    const first = await login();
+    const refreshed = await post('refresh', { refreshToken: first.refreshToken });
+    const second = (await refreshed.json()) as Tokens;
+    await app.get(DatabaseService).client.session.updateMany({
+      where: { tokenHash: app.get(TokenService).hashRefreshToken(first.refreshToken) },
+      data: { revokedAt: new Date(Date.now() - 60_000) },
+    });
+    expect((await post('refresh', { refreshToken: first.refreshToken })).status).toBe(401);
     expect((await me(second.accessToken)).status).toBe(401);
   });
 

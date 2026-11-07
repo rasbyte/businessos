@@ -6,6 +6,8 @@ import { SmsSender } from './sms/sms-sender.js';
 import { ACCESS_TOKEN_TTL_SECONDS, TokenService } from './token.service.js';
 
 const REFRESH_TTL_MS = 30 * 24 * 60 * 60 * 1000;
+// A refresh token used again within this time is refused but does not end the sessions.
+const REUSE_GRACE_MS = 10_000;
 
 export interface ClientInfo {
   ip: string;
@@ -80,7 +82,9 @@ export class AuthService {
     });
     if (claimed.count === 0) {
       // A token that was already used coming back may mean it was stolen: end every session.
-      if (session.revokedAt !== null) {
+      const reusedLongAgo =
+        session.revokedAt !== null && Date.now() - session.revokedAt.getTime() > REUSE_GRACE_MS;
+      if (reusedLongAgo) {
         await this.database.client.session.updateMany({
           where: { userId: session.userId, revokedAt: null },
           data: { revokedAt: new Date() },

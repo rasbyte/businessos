@@ -14,3 +14,11 @@ Status: accepted
 ## Consequences
 
 Each protected request costs one small database lookup. Rotating `JWT_SECRET` signs everyone out of their current access token.
+
+## Refresh replay grace window
+
+Two requests can refresh at nearly the same moment (for example two open tabs). A refresh token used again within 10 seconds of its first use is refused but does not end any session. Used again later, it is treated as stolen and every session of that user ends.
+
+## Client address behind the web server
+
+The web server forwards the visitor's address in `X-Forwarded-For`. The API trusts that header only from loopback and private network addresses, so the per-address code limits apply to real visitors and not to the web server.
