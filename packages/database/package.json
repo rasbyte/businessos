@@ -17,10 +17,10 @@
     "generate": "prisma generate",
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "migrate:dev": "prisma migrate dev",
+    "migrate:dev": "prisma migrate dev && prisma generate",
     "migrate:deploy": "prisma migrate deploy",
     "studio": "prisma studio",
-    "seed": "tsc -p tsconfig.json && node --env-file=../../.env dist/seed.js"
+    "seed": "prisma generate && tsc -p tsconfig.json && node --env-file=../../.env dist/seed.js"
   },
   "dependencies": {
     "@prisma/adapter-pg": "7.10.1",

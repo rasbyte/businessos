@@ -35,6 +35,32 @@ enum Language {
   EN
 }
 
+enum BusinessType {
+  RENTAL
+  AGRICULTURE
+  PHARMACY
+  SOFTWARE_SERVICES
+  OTHER
+}
+
+enum UnitType {
+  FLAT
+  SHOP
+}
+
+enum UnitStatus {
+  VACANT
+  OCCUPIED
+}
+
+enum LeaseStatus {
+  DRAFT
+  SENT
+  SIGNED_BY_RENTER
+  ACTIVE
+  ENDED
+}
+
 model Organization {
   id        String             @id @default(uuid(7)) @db.Uuid
   name      String
@@ -45,6 +71,8 @@ model Organization {
 
   memberships Membership[]
   invites     Invite[]
+  businesses  Business[]
+  renters     Renter[]
 
   @@map("organizations")
 }
@@ -63,6 +91,7 @@ model User {
   memberships Membership[]
   sessions    Session[]
   invitesSent Invite[]
+  renter      Renter?
 
   @@map("users")
 }
@@ -71,6 +100,7 @@ model Membership {
   id             String         @id @default(uuid(7)) @db.Uuid
   userId         String         @map("user_id") @db.Uuid
   organizationId String         @map("organization_id") @db.Uuid
+  businessId     String?        @map("business_id") @db.Uuid
   role           MembershipRole
   permissions    String[]       @default([])
   isActive       Boolean        @default(true) @map("is_active")
@@ -79,6 +109,7 @@ model Membership {
 
   user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  business     Business?    @relation(fields: [businessId], references: [id], onDelete: Cascade)
 
   @@unique([userId, organizationId])
   @@index([organizationId])
@@ -119,4 +150,103 @@ model Session {
 
   @@index([userId])
   @@map("sessions")
+}
+
+model Business {
+  id             String       @id @default(uuid(7)) @db.Uuid
+  organizationId String       @map("organization_id") @db.Uuid
+  type           BusinessType
+  name           String
+  createdAt      DateTime     @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime     @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  properties   Property[]
+  memberships  Membership[]
+
+  @@index([organizationId])
+  @@map("businesses")
+}
+
+model Property {
+  id         String   @id @default(uuid(7)) @db.Uuid
+  businessId String   @map("business_id") @db.Uuid
+  name       String
+  address    String?
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  units    Unit[]
+
+  @@index([businessId])
+  @@map("properties")
+}
+
+model Unit {
+  id           String     @id @default(uuid(7)) @db.Uuid
+  propertyId   String     @map("property_id") @db.Uuid
+  type         UnitType
+  number       String
+  floor        String?
+  areaSqft     Int?       @map("area_sqft")
+  bedrooms     Int?
+  bathrooms    Int?
+  shopCategory String?    @map("shop_category")
+  status       UnitStatus @default(VACANT)
+  createdAt    DateTime   @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt    DateTime   @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  leases   Lease[]
+
+  @@unique([propertyId, number])
+  @@map("units")
+}
+
+model Renter {
+  id               String   @id @default(uuid(7)) @db.Uuid
+  organizationId   String   @map("organization_id") @db.Uuid
+  userId           String?  @unique @map("user_id") @db.Uuid
+  name             String
+  phone            String
+  whatsapp         String?
+  email            String?
+  nidNumber        String?  @map("nid_number")
+  businessName     String?  @map("business_name")
+  emergencyContact String?  @map("emergency_contact")
+  notes            String?
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt        DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  leases       Lease[]
+
+  @@unique([organizationId, phone])
+  @@map("renters")
+}
+
+model Lease {
+  id             String      @id @default(uuid(7)) @db.Uuid
+  unitId         String      @map("unit_id") @db.Uuid
+  renterId       String      @map("renter_id") @db.Uuid
+  status         LeaseStatus @default(DRAFT)
+  monthlyRent    Int         @map("monthly_rent")
+  salami         Int         @default(0)
+  advanceDeposit Int         @default(0) @map("advance_deposit")
+  startDate      DateTime    @map("start_date") @db.Date
+  endDate        DateTime?   @map("end_date") @db.Date
+  dueDay         Int         @default(10) @map("due_day")
+  renterSignedAt DateTime?   @map("renter_signed_at") @db.Timestamptz(3)
+  ownerSignedAt  DateTime?   @map("owner_signed_at") @db.Timestamptz(3)
+  createdAt      DateTime    @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime    @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  unit   Unit   @relation(fields: [unitId], references: [id], onDelete: Restrict)
+  renter Renter @relation(fields: [renterId], references: [id], onDelete: Restrict)
+
+  @@index([unitId])
+  @@index([renterId])
+  @@map("leases")
 }

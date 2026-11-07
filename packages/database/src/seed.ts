@@ -15,15 +15,37 @@ async function main(): Promise<void> {
 
   const db = createPrismaClient(databaseUrl);
   try {
-    const existing = await db.user.findFirst({ where: { platformRole: 'DEVELOPER' } });
-    if (existing) {
-      console.log('Developer account already exists, nothing to do.');
-      return;
-    }
-    const developer = await db.user.create({
-      data: { phone, name: 'Developer', platformRole: 'DEVELOPER' },
+    const developer =
+      (await db.user.findFirst({ where: { platformRole: 'DEVELOPER' } })) ??
+      (await db.user.create({ data: { phone, name: 'Developer', platformRole: 'DEVELOPER' } }));
+
+    const organization =
+      (await db.organization.findFirst({ where: { type: 'INTERNAL' } })) ??
+      (await db.organization.create({ data: { name: 'ICT Station 403', type: 'INTERNAL' } }));
+
+    await db.membership.upsert({
+      where: {
+        userId_organizationId: { userId: developer.id, organizationId: organization.id },
+      },
+      update: {},
+      create: { userId: developer.id, organizationId: organization.id, role: 'OWNER' },
     });
-    console.log('Created developer account', developer.id);
+
+    const business =
+      (await db.business.findFirst({
+        where: { organizationId: organization.id, type: 'RENTAL' },
+      })) ??
+      (await db.business.create({
+        data: { organizationId: organization.id, type: 'RENTAL', name: 'ICT Station 403 Rent' },
+      }));
+
+    const property =
+      (await db.property.findFirst({ where: { businessId: business.id } })) ??
+      (await db.property.create({ data: { businessId: business.id, name: 'ICT Station 403' } }));
+
+    console.log('Developer', developer.id);
+    console.log('Internal organization', organization.id);
+    console.log('Rental business', business.id, 'property', property.id);
   } finally {
     await db.$disconnect();
   }
