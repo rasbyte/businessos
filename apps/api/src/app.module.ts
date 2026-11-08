@@ -7,6 +7,7 @@ import { envSchema } from './config/env.js';
 import { DatabaseModule } from './database/database.module.js';
 import { HealthModule } from './health/health.module.js';
 import { RedisModule } from './redis/redis.module.js';
+import { UnitsModule } from './units/units.module.js';
 
 // The .env file lives at the repository root, three folders above this file
 // (both in src/ and in the compiled dist/). It is optional: in production the
@@ -20,6 +21,7 @@ const envFilePath = fileURLToPath(new URL('../../../.env', import.meta.url));
     RedisModule,
     HealthModule,
     AuthModule,
+    UnitsModule,
   ],
   providers: [{ provide: APP_PIPE, useClass: StandardSchemaValidationPipe }],
 })
