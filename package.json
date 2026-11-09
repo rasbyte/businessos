@@ -14,7 +14,8 @@
     "infra:up": "docker compose -f infra/docker-compose.yml up -d",
     "infra:down": "docker compose -f infra/docker-compose.yml down",
     "infra:logs": "docker compose -f infra/docker-compose.yml logs -f",
-    "check": "bash scripts/check.sh"
+    "check": "bash scripts/check.sh",
+    "smoke": "bash scripts/smoke.sh"
   },
   "license": "UNLICENSED",
   "devEngines": {

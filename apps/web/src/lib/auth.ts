@@ -20,3 +20,18 @@ export async function requireUser() {
   if (!user) redirect('/login');
   return user;
 }
+
+/** The signed-in user together with the organization they work in. Redirects when they have none. */
+export async function requireOrgAccess() {
+  const user = await requireUser();
+  const membership = user.memberships.find((item) => item.organization.status === 'ACTIVE');
+  if (!membership) {
+    redirect('/no-access');
+  }
+  return {
+    user,
+    org: membership.organization,
+    role: membership.role,
+    permissions: membership.permissions,
+  };
+}

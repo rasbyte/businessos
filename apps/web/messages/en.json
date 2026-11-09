@@ -3,8 +3,14 @@
     "brand": "BusinessOS",
     "title": "Rent management",
     "subtitle": "Collect rent, track electricity bills and keep every agreement safe.",
+    "orgLabel": "Organization: {name}",
     "signedInAs": "Signed in as {name}",
     "signOut": "Sign out"
+  },
+  "Nav": {
+    "label": "Main menu",
+    "home": "Home",
+    "units": "Units"
   },
   "Language": {
     "label": "Language"
@@ -25,5 +31,60 @@
       "tooMany": "Too many attempts. Please try again in a little while.",
       "unavailable": "We cannot connect right now. Please try again in a little while."
     }
+  },
+  "Units": {
+    "title": "Units",
+    "add": "Add unit",
+    "empty": "No units here yet.",
+    "emptyHint": "Add your first shop or flat.",
+    "noRenter": "No renter yet",
+    "filters": {
+      "all": "All",
+      "shops": "Shops",
+      "flats": "Flats",
+      "vacant": "Vacant"
+    },
+    "type": {
+      "SHOP": "Shop",
+      "FLAT": "Flat"
+    },
+    "state": {
+      "vacant": "Vacant",
+      "occupied": "Occupied",
+      "pending": "Lease pending"
+    }
+  },
+  "UnitForm": {
+    "title": "Add unit",
+    "type": "Type",
+    "flat": "Flat",
+    "shop": "Shop",
+    "property": "Building",
+    "number": "Unit number",
+    "numberHint": "For example 104 or 3B",
+    "floor": "Floor",
+    "area": "Size (sq ft)",
+    "bedrooms": "Bedrooms",
+    "bathrooms": "Bathrooms",
+    "category": "Shop type",
+    "categoryHint": "For example mobile or computer",
+    "save": "Save unit",
+    "cancel": "Cancel",
+    "noProperty": "There is no building yet. Ask the platform admin to add one.",
+    "errors": {
+      "invalid": "Please check the unit number and the other fields.",
+      "duplicate": "A unit with this number already exists in this building.",
+      "noAccess": "You are not allowed to add units.",
+      "unavailable": "We cannot save right now. Please try again in a little while."
+    }
+  },
+  "NoAccess": {
+    "title": "No access yet",
+    "text": "Your number is not linked to an organization. Please contact the person who runs your business system."
+  },
+  "ErrorPage": {
+    "title": "Something went wrong",
+    "text": "Please try again.",
+    "retry": "Try again"
   }
 }
